@@ -33,6 +33,9 @@ extern int mMsg_Check_not_series_main_wait(mMsg_Window_c* msg_p) {
 }
 
 extern int mMsg_Check_main_hide(mMsg_Window_c* msg_p) {
+#ifdef TARGET_PC
+  if (pc_claude_is_conversation_active()) return 0;
+#endif
   return mMsg_Check_main_index(msg_p, mMsg_INDEX_HIDE);
 }
 
@@ -66,7 +69,8 @@ extern int mMsg_request_main_forceoff() {
 }
 
 extern int mMsg_request_main_disappear(mMsg_Window_c* msg_p) {
-  return mMsg_end_to_disappear(msg_p);
+  extern GAME* gamePT;
+  return mMsg_end_to_disappear(msg_p, gamePT);
 }
 
 extern int mMsg_request_main_appear(mMsg_Window_c* msg_p, ACTOR* client_actor_p, int show_name, rgba_t* window_color, int msg_no, int request_priority) {

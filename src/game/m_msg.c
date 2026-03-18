@@ -11,6 +11,7 @@
 #include "sys_matrix.h"
 #ifdef TARGET_PC
 #include "pc_bswap.h"
+#include "pc_claude_msg.h"
 #endif
 
 static u32 Msg_table_rom_start = 0;
@@ -23,7 +24,7 @@ typedef int (*mMsg_CONTROL_CODE_PROC)(mMsg_Window_c*, int*);
 typedef void (*mMsg_MAIN_PROC)(mMsg_Window_c*, GAME*);
 
 static void mMsg_MainSetup_Window(mMsg_Window_c* msg_p, GAME* game);
-static int mMsg_end_to_disappear(mMsg_Window_c* msg_p);
+static int mMsg_end_to_disappear(mMsg_Window_c* msg_p, GAME* game);
 
 #include "../src/game/m_msg_ctrl.c_inc"
 

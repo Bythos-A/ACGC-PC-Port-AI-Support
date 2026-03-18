@@ -37,6 +37,18 @@ compile_commands.json
 !requirements.txt
 *.exe
 
+# ROM / disc images (provide your own)
+*.iso
+*.gcm
+*.ciso
+rom/
+
+# Claude integration — API secrets and per-save conversation data
+# (build32/ above already covers these, but listed explicitly as a safety net)
+**/save/api_key.txt
+**/save/claude_*.txt
+**/save/claude_debug.log
+
 # For saving work files into (like IDB)
 temp/
 
@@ -47,3 +59,5 @@ temp/
 include/PR/
 include/gcc/
 include/compiler/gcc/stdlib.h
+/.claude
+*.manifest

@@ -1,3 +1,7 @@
+#ifdef TARGET_PC
+#include "pc_claude_msg.h"
+#endif
+
 static int mMsg_Check_ScrollOrder(mMsg_Window_c* msg_p) {
   return (chkTrigger(BUTTON_A) || chkTrigger(BUTTON_B));
 }
@@ -15,10 +19,13 @@ static int mMsg_MsgTimeEnd_dec(mMsg_Window_c* msg_p) {
   }
 }
 
-static int mMsg_end_to_disappear(mMsg_Window_c* msg_p) {
+static int mMsg_end_to_disappear(mMsg_Window_c* msg_p, GAME* game) {
   if (mMsg_Change_request_main_index(msg_p, mMsg_INDEX_DISAPPEAR, 5)) {
     mMsg_Clear_CursolIndex(msg_p);
     mMsg_Unset_ForceNext(msg_p);
+#ifdef TARGET_PC
+    pc_claude_on_dialogue_end(game);
+#endif
     return TRUE;
   }
 
@@ -27,7 +34,7 @@ static int mMsg_end_to_disappear(mMsg_Window_c* msg_p) {
 
 static void mMsg_request_main_index_fromNormal(mMsg_Window_c* msg_p, GAME* game) {
   if (mMsg_MsgTimeEnd_dec(msg_p) && mMsg_Check_NextIndex_MsgTimeEndCode(msg_p)) {
-    mMsg_end_to_disappear(msg_p);
+    mMsg_end_to_disappear(msg_p, game);
   }
   else if ((mMsg_Check_ScrollOrder(msg_p) || msg_p->force_next) && msg_p->lock_continue == FALSE) {
     int last = FALSE;
@@ -56,7 +63,7 @@ static void mMsg_request_main_index_fromNormal(mMsg_Window_c* msg_p, GAME* game)
           msg_p->status_flags |= mMsg_STATUS_FLAG_IDLING_NOW;
         }
         else {
-          mMsg_end_to_disappear(msg_p);
+          mMsg_end_to_disappear(msg_p, game);
         }
       }
     }

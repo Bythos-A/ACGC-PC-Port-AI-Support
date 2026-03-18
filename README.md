@@ -2,6 +2,12 @@
 
 A native PC port of Animal Crossing (GameCube) built on top of the [ac-decomp](https://github.com/ACreTeam/ac-decomp) decompilation project.
 
+## Claude NPC Dialogue
+
+Villagers generate live dialogue via the Anthropic Claude API, with persistent per-villager memory and back-and-forth conversation.
+
+![Claude NPC dialogue demo](media/demo.gif)
+
 The game's original C code runs natively on x86, with a custom translation layer replacing the GameCube's GX graphics API with OpenGL 3.3.
 
 This repository does not contain any game assets or assembly whatsoever. An existing copy of the game is required.

@@ -2440,7 +2440,50 @@ static void mED_editor_ovl_draw(Submenu* submenu, GAME* game) {
     mSM_MenuInfo_c* menu_info = &overlay->menu_info[mSM_OVL_EDITOR];
 
     (*menu_info->pre_draw_func)(submenu, game);
+
+#ifdef TARGET_PC
+    /* Draw hni_den frame background (normally drawn by the HBOARD overlay before it calls
+       into us). Must come before mED_set_dl so it sits behind the keyboard and text. */
+    {
+        extern Gfx hni_den_model[];
+        GRAPH* graph = game->graph;
+        Gfx* gfx;
+        f32 fx = menu_info->position[0];
+        f32 fy = menu_info->position[1];
+
+        Matrix_scale(16.0f, 16.0f, 1.0f, MTX_LOAD);
+        Matrix_translate(fx, fy, 140.0f, MTX_MULT);
+
+        OPEN_DISP(graph);
+        gfx = NOW_POLY_OPA_DISP;
+        gSPMatrix(gfx++, _Matrix_to_Mtx_new(graph), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPDisplayList(gfx++, hni_den_model);
+        SET_POLY_OPA_DISP(gfx);
+        CLOSE_DISP(graph);
+    }
+#endif
+
     mED_set_dl(submenu, menu_info, game);
+
+#ifdef TARGET_PC
+    /* Draw typed-text preview. Normally this is rendered by the HBOARD overlay wrapper
+       (mHB_set_character), but we open mSM_OVL_EDITOR directly so that layer is absent.
+       set_char_matrix_proc was already called inside mED_StringsDraw above. */
+    {
+        mED_Ovl_c* editor_ovl = overlay->editor_ovl;
+        if (editor_ovl != NULL && editor_ovl->now_str_len > 0) {
+            f32 px = menu_info->position[0] + 46.0f;
+            f32 py = -menu_info->position[1] + 54.0f;
+            mFont_SetLineStrings(game,
+                editor_ovl->input_str, editor_ovl->now_str_len,
+                px, py,
+                30, 0, 0, 255,
+                FALSE, TRUE,
+                1.0f, 1.0f,
+                mFont_MODE_POLY);
+        }
+    }
+#endif
 
     if (menu_info->pre_menu_type == mSM_OVL_ADDRESS && submenu->overlay->address_ovl->display_list != NULL) {
         OPEN_DISP(game->graph);

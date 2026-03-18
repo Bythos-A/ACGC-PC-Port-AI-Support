@@ -22,8 +22,32 @@ static void mMsg_request_main_index_fromAppear(mMsg_Window_c* msg_p, GAME* game,
 }
 
 static void mMsg_Main_Appear(mMsg_Window_c* msg_p, GAME* game) {
+#ifdef TARGET_PC
+    /* Skip the scale function once the window is fully open to prevent the
+       18-frame animation from looping while we wait for the async API call. */
+    int scaling_done_flag;
+    if (msg_p->window_scale >= 1.0f) {
+        scaling_done_flag = TRUE;
+    } else {
+        scaling_done_flag = mMsg_Main_Appear_SetScale(msg_p, game);
+    }
+    /* Suppress the CURSOL transition while an async call is in flight.
+       Allow it once the call finishes (poll returns 1) or when there is no
+       async call at all (non-NPC dialogue, ROM fallback, etc.). */
+    int async_just_done = pc_claude_is_async_pending()
+                          ? pc_claude_poll_async(msg_p) : 0;
+    if (!pc_claude_is_async_pending() || async_just_done) {
+        if (async_just_done && msg_p->msg_data != NULL) {
+            /* Recount msg_len now that the buffer has been updated */
+            msg_p->msg_data->msg_len =
+                mMsg_Count_MsgData(msg_p->msg_data->text_buf.data);
+        }
+        mMsg_request_main_index_fromAppear(msg_p, game, scaling_done_flag);
+    }
+#else
     int scaling_done_flag = mMsg_Main_Appear_SetScale(msg_p, game);
     mMsg_request_main_index_fromAppear(msg_p, game, scaling_done_flag);
+#endif
     mMsg_MainSetup_Window(msg_p, game);
 }
 
@@ -36,6 +60,16 @@ static void mMsg_MainSetup_Appear(mMsg_Window_c* msg_p, GAME* game) {
         int show_name = appear_data->name_shown_flag;
 
         mMsg_Set_client_actor_p(msg_p, actor, show_name);
+
+#ifdef TARGET_PC
+        /* Hook fires here, after client_actor_p is correctly set for this conversation.
+           If the intercept replaces the buffer we must recount msg_len. */
+        if (actor != NULL) {
+            pc_claude_intercept_message(msg_p->msg_data, actor, msg_no);
+            msg_p->msg_data->msg_len = mMsg_Count_MsgData(msg_p->msg_data->text_buf.data);
+        }
+#endif
+
         msg_p->window_background_color = appear_data->window_color;
         mMsg_sound_spec_change_voice(msg_p);
         mMsg_sound_voice_mode(msg_p);

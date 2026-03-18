@@ -377,3 +377,73 @@ Linux support uses POSIX equivalents: `signal()` instead of VEH, `mmap()` instea
 - **`#included .c` files**: emu64_utility.c, emu64_print.cpp, jsyswrapper_ext.cpp, jsyswrapper_main.cpp, ac_animal_logo_misc.c, m_item_debug.c, ac_npc_shop_common.c — these are compiled as part of their parent file, not standalone.
 - **Title demo OOB**: `demo_npc_list` has 14 valid entries but `mNpc_SetAnimalTitleDemo` loops 15 times. On GC, the garbage 15th read was benign; on PC it produced invalid NPC `looks` → OOB crash in wander logic. Fixed with sentinel entry, slot clearing, and looks clamp.
 - **EFB-copied textures are LE**: ROM textures are BE, but EFB copies are generated in LE on PC. Texture decoder endianness fixes must not break EFB copies.
+
+---
+
+## Claude NPC Dialogue Integration
+
+Villager dialogue is generated live by the [Anthropic Claude API](https://www.anthropic.com/api).
+Each villager maintains a persistent memory of the player across sessions and responds in character
+based on their personality type.
+
+### Requirements
+
+- `curl` must be available in PATH (ships with Windows 10/11; `brew install curl` / `apt install curl` elsewhere)
+- An [Anthropic API key](https://console.anthropic.com)
+
+### Providing your API key
+
+Either method works — the env var takes priority:
+
+1. **Environment variable**: `ANTHROPIC_API_KEY=sk-ant-...`
+2. **File**: Create `save/api_key.txt` (in the same directory as the executable) containing just your key on the first line
+
+The save directory is `pc/build32/bin/save/` when building locally.
+
+### Switching models
+
+The model is set by `CLAUDE_MODEL` in `pc/src/pc_claude_msg.c`:
+
+```c
+#define CLAUDE_MODEL "claude-haiku-4-5-20251001"
+```
+
+See the [Anthropic models overview](https://docs.anthropic.com/en/docs/models-overview) for available options.
+
+### Conversation history and memory
+
+| File | Contents |
+|------|----------|
+| `save/claude_<NAME>.txt` | Per-villager conversation history + one-line memory of the player |
+| `save/api_key.txt` | Your API key (gitignored — never committed) |
+| `save/claude_debug.log` | Debug log for API calls (gitignored) |
+
+Delete `save/claude_<NAME>.txt` to reset a villager's memory entirely.
+
+### Dialogue tags
+
+Claude can include these control tags in its responses:
+
+| Tag | Effect |
+|-----|--------|
+| `<<MSGCONTENTS_FUN>>` | Cheerful, upbeat tone |
+| `<<MSGCONTENTS_ANGRY>>` | Irritated, grumpy tone |
+| `<<MSGCONTENTS_SAD>>` | Melancholy, somber tone |
+| `<<MSGCONTENTS_SLEEPY>>` | Drowsy, mumbling tone |
+| `<<MSGCONTENTS_NORMAL>>` | Reset to neutral tone |
+| `<<PAUSE N>>` | Pause N frames (e.g. `<<PAUSE 15>>` ≈ ½ second) |
+
+Tags can appear anywhere in a response; mood shifts from that point forward.
+Paging (`<<BTN>>`) is inserted automatically — Claude does not need to add it.
+
+### Build helper
+
+`pc/tools/build.py` is a cross-platform wrapper that ensures MinGW GCC errors are
+visible when building from a terminal where the 32-bit DLL path isn't in PATH:
+
+```
+python pc/tools/build.py
+
+# Custom MinGW location:
+MINGW32_BIN=C:\tools\mingw32\bin python pc/tools/build.py
+```

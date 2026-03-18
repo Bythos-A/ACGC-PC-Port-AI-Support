@@ -1,4 +1,11 @@
+#ifdef TARGET_PC
+#include "pc_claude_msg.h"
+#endif
+
 static void mMsg_Main_Hide(mMsg_Window_c* msg_p, GAME* game) {
+#ifdef TARGET_PC
+  pc_claude_check_continue(msg_p, game);
+#endif
   mMsg_MainSetup_Window(msg_p, game);
 }
 
