@@ -2,12 +2,6 @@
 
 A native PC port of Animal Crossing (GameCube) built on top of the [ac-decomp](https://github.com/ACreTeam/ac-decomp) decompilation project.
 
-## Claude NPC Dialogue
-
-Villagers generate live dialogue via the Anthropic Claude API, with persistent per-villager memory and back-and-forth conversation.
-
-![Claude NPC dialogue demo](media/demo.gif)
-
 The game's original C code runs natively on x86, with a custom translation layer replacing the GameCube's GX graphics API with OpenGL 3.3.
 
 This repository does not contain any game assets or assembly whatsoever. An existing copy of the game is required.
@@ -30,7 +24,8 @@ Only needed if you want to modify the code. Otherwise, use the [pre-built releas
 
 ### Requirements
 
-- **MSYS2** (https://www.msys2.org/)
+- **MSYS2** (https://www.msys2.org/) with the MINGW32 toolchain
+- **Python 3** (https://www.python.org/)
 - **Animal Crossing (USA) disc image** (ISO, GCM, or CISO format)
 
 ### MSYS2 Packages
@@ -49,18 +44,22 @@ pacman -S mingw-w64-i686-gcc mingw-w64-i686-cmake mingw-w64-i686-SDL2 mingw-w64-
    cd ACGC-PC-Port
    ```
 
-2. Build (from **MSYS2 MINGW32** shell):
+2. Build using the included Python helper (handles CMake configuration automatically):
    ```bash
-   ./build_pc.sh
+   python pc/tools/build.py
    ```
+   > If MSYS2 is not installed to the default path (`C:\msys64`), set the `MINGW32_BIN` environment variable:
+   > ```bash
+   > MINGW32_BIN=C:\path\to\mingw32\bin python pc/tools/build.py
+   > ```
 
-3. Place your disc image in the `rom/` folder:
+3. Place your disc image in the rom folder next to the executable:
    ```
-   pc/build32/bin/rom/YourGame.ciso
+   pc/build32/bin/rom/YourGame.iso
    ```
 
 4. Run:
-   ```bash
+   ```
    pc/build32/bin/AnimalCrossing.exe
    ```
 
