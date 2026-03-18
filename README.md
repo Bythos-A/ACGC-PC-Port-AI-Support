@@ -20,7 +20,8 @@ Pre-built releases are available on the [Releases](https://github.com/flyngmt/AC
 
 1. Download and extract the latest release zip
 2. Place your disc image in the `rom/` folder
-3. Run `AnimalCrossing.exe`
+3. Create a file in `save/` folder called `api_key.txt` containing your Anthropic API key.
+4. Run `AnimalCrossing.exe`
 
 The game reads all assets directly from the disc image at startup. No extraction or preprocessing step is needed.
 
@@ -33,6 +34,7 @@ Only needed if you want to modify the code. Otherwise, use the [pre-built releas
 - **MSYS2** (https://www.msys2.org/) with the MINGW32 toolchain
 - **Python 3** (https://www.python.org/)
 - **Animal Crossing (USA) disc image** (ISO, GCM, or CISO format)
+- **Anthropic API Key** (Get a key at console.anthropic.com.)
 
 ### MSYS2 Packages
 
