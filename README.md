@@ -34,7 +34,7 @@ Only needed if you want to modify the code. Otherwise, use the [pre-built releas
 - **MSYS2** (https://www.msys2.org/) with the MINGW32 toolchain
 - **Python 3** (https://www.python.org/)
 - **Animal Crossing (USA) disc image** (ISO, GCM, or CISO format)
-- **Anthropic API Key** (Get a key at console.anthropic.com.)
+- **Anthropic API Key** (https://console.anthropic.com/)
 
 ### MSYS2 Packages
 
