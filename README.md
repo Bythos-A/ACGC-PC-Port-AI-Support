@@ -14,7 +14,21 @@ This repository does not contain any game assets or assembly whatsoever. An exis
 
 Supported versions: GAFE01_00: Rev 0 (USA)
 
-## Requirements
+## Quick Start (Pre-built Release)
+
+Pre-built releases are available on the [Releases](https://github.com/flyngmt/ACGC-PC-Port/releases) page. No build tools required.
+
+1. Download and extract the latest release zip
+2. Place your disc image in the `rom/` folder
+3. Run `AnimalCrossing.exe`
+
+The game reads all assets directly from the disc image at startup. No extraction or preprocessing step is needed.
+
+## Building from Source
+
+Only needed if you want to modify the code. Otherwise, use the [pre-built release](https://github.com/flyngmt/ACGC-PC-Port/releases) above.
+
+### Requirements
 
 - **MSYS2** (https://www.msys2.org/)
 - **Animal Crossing (USA) disc image** (ISO, GCM, or CISO format)
@@ -24,15 +38,15 @@ Supported versions: GAFE01_00: Rev 0 (USA)
 Open **MSYS2 MINGW32** from your Start menu and install:
 
 ```bash
-pacman -S mingw-w64-i686-gcc mingw-w64-i686-cmake mingw-w64-i686-SDL2
+pacman -S mingw-w64-i686-gcc mingw-w64-i686-cmake mingw-w64-i686-SDL2 mingw-w64-i686-make
 ```
 
-## Building
+### Build Steps
 
 1. Clone the repository:
    ```bash
    git clone https://github.com/flyngmt/ACGC-PC-Port.git
-   cd ac-decomp
+   cd ACGC-PC-Port
    ```
 
 2. Build (from **MSYS2 MINGW32** shell):
@@ -50,11 +64,9 @@ pacman -S mingw-w64-i686-gcc mingw-w64-i686-cmake mingw-w64-i686-SDL2
    pc/build32/bin/AnimalCrossing.exe
    ```
 
-The game reads all assets directly from the disc image at startup. No extraction or preprocessing step is needed.
-
 ## Controls
 
-Keyboard bindings are customizable via `pc/build32/bin/keybindings.ini`.
+Keyboard bindings are customizable via `keybindings.ini` (next to the executable). Mouse buttons (Mouse1/Mouse2/Mouse3) can also be assigned.
 
 ### Keyboard (defaults)
 
@@ -81,12 +93,12 @@ SDL2 game controllers are supported with automatic hotplug detection. Button map
 |------|-------------|
 | `--verbose` | Enable diagnostic logging |
 | `--no-framelimit` | Disable frame limiter (unlocked FPS) |
-| `--model-viewer [index]` | Launch debug model viewer (75 building/structure models) |
+| `--model-viewer [index]` | Launch debug model viewer (structures, NPCs, fish) |
 | `--time HOUR` | Override in-game hour (0-23) |
 
 ## Settings
 
-Graphics settings are stored in `pc/build32/bin/settings.ini` and can be edited manually or through the in-game options menu:
+Graphics settings are stored in `settings.ini` and can be edited manually or through the in-game options menu:
 
 - Resolution (up to 4K)
 - Fullscreen toggle
@@ -96,12 +108,11 @@ Graphics settings are stored in `pc/build32/bin/settings.ini` and can be edited 
 
 ## Texture Packs
 
-Custom textures can be placed in `pc/build32/bin/texture_pack/`. Dolphin-compatible format (XXHash64, DDS).
-
+Custom textures can be placed in `texture_pack/`. Dolphin-compatible format (XXHash64, DDS).
 
 ## Save Data
 
-Save files are stored in `pc/build32/bin/save/` using the standard GCI format, compatible with Dolphin emulator saves. Place a Dolphin GCI export in the save directory to import an existing save.
+Save files are stored in `save/` using the standard GCI format, compatible with Dolphin emulator saves. Place a Dolphin GCI export in the save directory to import an existing save.
 
 ## Credits
 
