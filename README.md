@@ -8,6 +8,12 @@ This repository does not contain any game assets or assembly whatsoever. An exis
 
 Supported versions: GAFE01_00: Rev 0 (USA)
 
+## Claude NPC Dialogue
+
+Villagers generate live dialogue via the Anthropic Claude API, with persistent per-villager memory and back-and-forth conversation.
+
+![Claude NPC dialogue demo](media/demo.gif)
+
 ## Quick Start (Pre-built Release)
 
 Pre-built releases are available on the [Releases](https://github.com/flyngmt/ACGC-PC-Port/releases) page. No build tools required.
@@ -116,6 +122,10 @@ Save files are stored in `save/` using the standard GCI format, compatible with 
 ## Credits
 
 This project would not be possible without the work of the [ACreTeam](https://github.com/ACreTeam) decompilation team. Their complete C decompilation of Animal Crossing is the foundation this port is built on.
+
+## Claude NPC Dialogue Setup
+
+To enable live AI dialogue, see **[pc/DOCUMENTATION.md](pc/DOCUMENTATION.md#claude-npc-dialogue-integration)** for setup instructions (API key, model selection, conversation history).
 
 ## AI Notice
 
