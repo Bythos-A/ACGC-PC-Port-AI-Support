@@ -14,6 +14,8 @@ Villagers generate live dialogue via the Anthropic Claude API, with persistent p
 
 ![Claude NPC dialogue demo](media/demo.gif)
 
+**Note: When having a conversation, press START to enter an empty message to exit the conversation!**
+
 ## Quick Start (Pre-built Release)
 
 Pre-built releases are available on the [Releases](https://github.com/flyngmt/ACGC-PC-Port/releases) page. No build tools required.
