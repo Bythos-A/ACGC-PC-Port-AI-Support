@@ -20,7 +20,7 @@ Pre-built releases are available on the [Releases](https://github.com/flyngmt/AC
 
 1. Download and extract the latest release zip
 2. Place your disc image in the `rom/` folder
-3. Create a file in `save/` folder called `api_key.txt` containing your Anthropic API key.
+3. Create a file in `save/` folder called `api_key.txt` containing your [Anthropic API key]((https://console.anthropic.com/)).
 4. Run `AnimalCrossing.exe`
 
 The game reads all assets directly from the disc image at startup. No extraction or preprocessing step is needed.
